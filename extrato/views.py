@@ -29,7 +29,7 @@ def novo_valor(request):
         )
 
         valores.save()
-        
+
         conta = Conta.objects.get(id=conta)
 
         if tipo == 'E':
@@ -43,3 +43,9 @@ def novo_valor(request):
 
         messages.add_message(request, constants.SUCCESS, 'Categoria cadastrada com sucesso')
         return redirect('/extrato/novo_valor')
+    
+
+
+def view_extrato(request):
+    valores = Valores.objects.all()
+    return render(request, 'view_extrato.html', {'valores':valores})
