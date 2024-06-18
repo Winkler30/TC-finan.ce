@@ -73,26 +73,31 @@
                     <div class="row">
                         <div class="col-md">
                             <div class="saldo">
-                                <span class="fonte-destaque">Saldo mensal</span>
+                                <span class="fonte-destaque">Cotações Atualizadas</span>
                                 <br>
-                                <span class="font-light">R$ 0.000,00</span>
+                                <p class="font-light">Data da Última Atualização: <span id="ultima_atualizacao"></span></p>
                             </div>
                         </div>
                         <div class="col-md">
-                            <div class="despesa">
-                                <span class="fonte-destaque">Despesa mensal</span>
+                            <div class="">
+                                <span class="fonte-destaque">Moedas</span>
                                 <br>
-                                <span class="font-light">R$ 0.000,00</span>
+                                <span class="font-light">Dolar (US$) / Euro (€) / Bitcoin (BTC)</span>
                             </div>
 
                         </div>
 
                     </div>
                     <hr class="hr-borda">
-                    <span class="fonte-destaque">Total livre</span>
-                    <span class="font-light negativo">R$ 0.000,00</span>
+                    <!-- <span class="fonte-destaque">Total livre</span>
+                    <span class="font-light positivo">R$ 0.000,00</span> -->
+                    <div id="cotacoes">
+                        <h5>Cotação do Dólar: <span class="fonte-destaque positivo" id="cotacao_dolar"></span></h5>
+                        <h5>Cotação do Euro: <span class="fonte-destaque positivo" id="cotacao_euro"></span></h5>
+                        <h5>Cotação do Bitcoin: <span class="fonte-destaque positivo" id="cotacao_btc"></span></h5>
+                    </div>
                     <hr class="hr-borda">
-                    <a href="#" class="botao-principal">Gerenciar dados mensais</a>
+                    <a href="" class="botao-principal">Baixar cotação de hoje!</a>
                 </div>
             </div>
 
@@ -159,4 +164,26 @@
         <br>
         <br>
     </div>
+    <script>
+        async function fetchCotacoes() {
+            try {
+                let response = await fetch("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL");
+                let data = await response.json();
+                
+                let cotacao_dolar = data["USDBRL"]["bid"];
+                let cotacao_euro = data["EURBRL"]["bid"];
+                let cotacao_btc = data["BTCBRL"]["bid"];
+
+                document.getElementById('cotacao_dolar').innerText = cotacao_dolar;
+                document.getElementById('cotacao_euro').innerText = cotacao_euro;
+                document.getElementById('cotacao_btc').innerText = (cotacao_btc * 1000).toFixed(2);
+                document.getElementById('ultima_atualizacao').innerText = new Date().toLocaleString();
+            } catch (error) {
+                console.error('Erro ao buscar as cotações:', error);
+            }
+        }
+
+        fetchCotacoes();
+    </script>
 {% endblock %}
+
