@@ -11,6 +11,8 @@
 {% block 'body' %}
 
     <div class="container">
+        <hr class="hr-borda">
+                    <a href="{% url 'home' %}" class="botao-principal">Voltar</a>
         <br>
         {% if messages %}
             {% for message in messages %}

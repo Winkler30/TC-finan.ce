@@ -5,14 +5,25 @@ from django.contrib import messages
 from django.contrib.messages import constants
 from django.db.models import Sum
 from extrato.models import Valores
-
+from datetime import datetime
+from .utils import calcula_total, calcula_equilibrio_financeiro
 # Create your views here.
 def home(request):
+    valores = Valores.objects.filter(data__month=datetime.now().month)  
+    entradas = valores.filter(tipo='E')
+    saidas = valores.filter(tipo='S')
+
+    total_entradas = calcula_total(entradas, 'valor')
+    total_saidas = calcula_total(saidas, 'valor')
+
     contas = Conta.objects.all()
     total_conta = 0
     for conta in contas:
         total_conta += conta.valor
-    return render(request, 'home.html', {'contas': contas, 'total_conta': total_conta})
+
+    percentrual_gastos_essenciais, percentrual_gastos_nao_essenciais = calcula_equilibrio_financeiro()
+
+    return render(request, 'home.html', {'contas': contas, 'total_conta': total_conta, 'total_entradas': total_entradas, 'total_saidas':total_saidas, 'percentrual_gastos_essenciais': int(percentrual_gastos_essenciais), 'percentrual_gastos_nao_essenciais': int(percentrual_gastos_nao_essenciais)})
 
 def gerenciar(request):
     contas = Conta.objects.all()
@@ -91,7 +102,7 @@ def dashboard(request):
         valores = Valores.objects.filter(categoria=categoria)
         for v in valores:
             total += v.valor
-            
+
         dados[categoria.categoria] = total
 
     return render(request, 'dashboard.html', {'labels': list(dados.keys()), 'values': list(dados.values())})

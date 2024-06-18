@@ -6,8 +6,8 @@
 {% endblock %} {% block 'body' %}
 <br />
 <br />
-<a href="{% url 'home' %}"  style="display: inline-block;  margin-bottom: 10px;" class="botao-principal">Voltar</a>
 <div class="container">
+  <a href="{% url 'home' %}"  style="display: inline-block;  margin-bottom: 10px;" class="botao-principal">Voltar</a>
   <div class="row">
     {% if messages %} {% for message in messages %}
     <div class="alert {{ message.tags }}">{{ message }}</div>
