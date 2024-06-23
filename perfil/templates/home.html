@@ -1,189 +1,260 @@
-{% extends 'bases/base.html' %}
-{% load static %}
-{% block 'head' %}
-    <link rel="stylesheet" href="{% static 'perfil/css/home.css' %}">
-{% endblock %}
-{% block 'body' %}
-    <div class="container">
-        <br>
-        <br>
-        <div class="row">
-            <div class="col-md-3">
-                <a style="text-decoration: none; color:white;" href="{% url 'novo_valor' %}">
-                    <div class="card">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <span  class="fonte-destaque">RS {{total_entradas}}</span>
-                            </div>
-                            <div class="col-md">
-                                <img class="icone-setas" src="{% static 'perfil/img/entradas.png' %}">
-                            </div>
-                        </div>
-        
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a style="text-decoration: none; color:white;" href="{% url 'novo_valor' %}">
-                    <div class="card">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <span  class="fonte-destaque">RS {{total_saidas}}</span>
-                            </div>
-                            <div class="col-md">
-                                <img class="icone-setas" src="{% static 'perfil/img/saidas.png' %}">
-                            </div>
-                        </div> 
-                    </div>
-                </a>
-            </div>
-        </div>
-        <br>
-        <br>
-       
-        <div class="row">
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="saldo">
-                        <span class="fonte-destaque">Saldo total</span>
-                        <br>
-                        <span class="font-light">R$ {{total_conta}}</span>
-                    </div>
-                    <hr class="hr-borda">
-                    <span class="fonte-destaque">Suas contas</span>
-
-                    <div class="div-contas">
-                        {% for conta in contas %}
-                            <div class="lista-conta">
-                                <span>{{conta.apelido}}</span>
-                                <span class="total-conta">R$ {{conta.valor}}</span>
-                            </div>
-                            <br>
-                        {% endfor %}
-                    </div>
-                    <hr class="hr-borda">
-                    <a href="{% url 'gerenciar' %}" class="botao-principal">Gerenciar contas</a>
-                </div>
-                
-            </div>
-
+{% extends 'bases/base.html' %} {% load static %} {% block 'head' %}
+<link rel="stylesheet" href="{% static 'perfil/css/home.css' %}" />
+{% endblock %} {% block 'body' %}
+<div class="container">
+  <br />
+  <br />
+  <div class="row">
+    <div class="col-md-3">
+      <a
+        style="text-decoration: none; color: white"
+        href="{% url 'novo_valor' %}"
+      >
+        <div class="card">
+          <div class="row">
+            <p class="font-light">
+              Entradas do Mês atual: <span id="mes_atual1"></span>
+            </p>
             <div class="col-md-8">
-                <div class="card">
-                    <div class="row">
-                        <div class="col-md">
-                            <div class="saldo">
-                                <span class="fonte-destaque">Cotações Atualizadas</span>
-                                <br>
-                                <p class="font-light">Data da Última Atualização: <span id="ultima_atualizacao"></span></p>
-                            </div>
-                        </div>
-                        <div class="col-md">
-                            <div class="">
-                                <span class="fonte-destaque">Moedas</span>
-                                <br>
-                                <span class="font-light">Dolar (US$) / Euro (€) / Bitcoin (BTC)</span>
-                            </div>
-
-                        </div>
-
-                    </div>
-                    <hr class="hr-borda">
-                    <!-- <span class="fonte-destaque">Total livre</span>
-                    <span class="font-light positivo">R$ 0.000,00</span> -->
-                    <div id="cotacoes">
-                        <h5>Cotação do Dólar: <span class="fonte-destaque positivo" id="cotacao_dolar"></span></h5>
-                        <h5>Cotação do Euro: <span class="fonte-destaque positivo" id="cotacao_euro"></span></h5>
-                        <h5>Cotação do Bitcoin: <span class="fonte-destaque positivo" id="cotacao_btc"></span></h5>
-                    </div>
-                    <hr class="hr-borda">
-                    <a href="" class="botao-principal">Baixar cotação de hoje!</a>
-                </div>
+              <span class="fonte-destaque">RS {{total_entradas}}</span>
             </div>
-
+            <div class="col-md">
+              <img
+                class="icone-setas"
+                src="{% static 'perfil/img/entradas.png' %}"
+              />
+            </div>
+          </div>
         </div>
-        <br>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="saldo">
-                        <span class="fonte-destaque">Planejamento</span>
-                    </div>
-                    <hr class="hr-borda">
-                    <a href="{% url 'definir_planejamento' %}" class="botao-principal">Definir planejamento</a>
-                    <hr class="hr-borda">
-                    <a href="{% url 'ver_planejamento' %}" class="botao-principal">Ver planejamento</a>
-                    <hr class="hr-borda">
-                    <a href="{% url 'dashboard' %}" class="botao-principal">Dashboard</a>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="card">
-                    <span class="fonte-destaque">Equilibrio financeiro</span>
-                    <hr class="hr-borda">
-
-                    <p>Gastos essenciais</p>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: {{percentrual_gastos_essenciais}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <br>
-                    <p>Gastos não essenciais</p>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: {{percentrual_gastos_nao_essenciais}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-
-                    <hr class="hr-borda">
-                    <a href="{% url 'gerenciar' %}" class="botao-principal">Alterar categorias essenciais</a>
-
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-4">
-            </div>
-            
-            <div class="col-md-8">
-                <div class="card">
-                    <span class="fonte-destaque">Gerenciar contas</span>
-                    <hr class="hr-borda">
-
-                    <span class="fonte-destaque">Próximas do vencimento</span>
-                    <span class="fonte-light">3 contas próximas do vencimento</span>
-                    <br>
-                    <span class="fonte-destaque negativo">Vencidas</span>
-                    <span class="fonte-light">0 contas vencidas</span>
-
-                    <hr class="hr-borda">
-                    
-                    <a href="{% url 'ver_contas' %}" class="botao-principal">Ver mais</a>
-
-                </div>
-            </div>
-        </div>
-        <br>
-        <br>
+      </a>
     </div>
-    <script>
-        async function fetchCotacoes() {
-            try {
-                let response = await fetch("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL");
-                let data = await response.json();
-                
-                let cotacao_dolar = data["USDBRL"]["bid"];
-                let cotacao_euro = data["EURBRL"]["bid"];
-                let cotacao_btc = data["BTCBRL"]["bid"];
+    <div class="col-md-3">
+      <a
+        style="text-decoration: none; color: white"
+        href="{% url 'novo_valor' %}"
+      >
+        <div class="card">
+          <div class="row">
+            <p class="font-light">
+              Saídas do Mês atual: <span id="mes_atual"></span>
+            </p>
 
-                document.getElementById('cotacao_dolar').innerText = cotacao_dolar;
-                document.getElementById('cotacao_euro').innerText = cotacao_euro;
-                document.getElementById('cotacao_btc').innerText = (cotacao_btc * 1000).toFixed(2);
-                document.getElementById('ultima_atualizacao').innerText = new Date().toLocaleString();
-            } catch (error) {
-                console.error('Erro ao buscar as cotações:', error);
-            }
-        }
+            <div class="col-md-8">
+              <span class="fonte-destaque">RS {{total_saidas}}</span>
+            </div>
+            <div class="col-md">
+              <img
+                class="icone-setas"
+                src="{% static 'perfil/img/saidas.png' %}"
+              />
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <br />
+  <br />
 
-        fetchCotacoes();
-    </script>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="saldo">
+          <span class="fonte-destaque">Saldo total</span>
+          <br />
+          <span class="font-light">R$ {{total_conta}}</span>
+        </div>
+        <hr class="hr-borda" />
+        <span class="fonte-destaque">Suas contas</span>
+
+        <div class="div-contas">
+          {% for conta in contas %}
+          <div class="lista-conta">
+            <span>{{conta.apelido}}</span>
+            <span class="total-conta">R$ {{conta.valor}}</span>
+          </div>
+          <br />
+          {% endfor %}
+        </div>
+        <hr class="hr-borda" />
+        <a href="{% url 'gerenciar' %}" class="botao-principal"
+          >Gerenciar contas</a
+        >
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card">
+        <div class="row">
+          <div class="col-md">
+            <div class="saldo">
+              <span class="fonte-destaque">Cotações Atualizadas</span>
+              <br />
+              <p class="font-light">
+                Data da Última Atualização:
+                <span id="ultima_atualizacao"></span>
+              </p>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="">
+              <span class="fonte-destaque">Moedas</span>
+              <br />
+              <span class="font-light"
+                >Dolar (US$) / Euro (€) / Bitcoin (BTC)</span
+              >
+            </div>
+          </div>
+        </div>
+        <hr class="hr-borda" />
+        <!-- <span class="fonte-destaque">Total livre</span>
+                    <span class="font-light positivo">R$ 0.000,00</span> -->
+        <div id="cotacoes">
+          <h5>
+            Cotação do Dólar:
+            <span class="fonte-destaque positivo" id="cotacao_dolar"></span>
+          </h5>
+          <h5>
+            Cotação do Euro:
+            <span class="fonte-destaque positivo" id="cotacao_euro"></span>
+          </h5>
+          <h5>
+            Cotação do Bitcoin:
+            <span class="fonte-destaque positivo" id="cotacao_btc"></span>
+          </h5>
+        </div>
+        <hr class="hr-borda" />
+        <a href="" class="botao-principal">Baixar cotação de hoje!</a>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="saldo">
+          <span class="fonte-destaque">Planejamento</span>
+        </div>
+        <hr class="hr-borda" />
+        <a href="{% url 'definir_planejamento' %}" class="botao-principal"
+          >Definir planejamento</a
+        >
+        <hr class="hr-borda" />
+        <a href="{% url 'ver_planejamento' %}" class="botao-principal"
+          >Ver planejamento</a
+        >
+        <hr class="hr-borda" />
+        <a href="{% url 'dashboard' %}" class="botao-principal">Dashboard</a>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <span class="fonte-destaque">Equilibrio financeiro</span>
+        <hr class="hr-borda" />
+
+        <p>Gastos essenciais</p>
+        <div class="progress">
+          <div
+            class="progress-bar progress-bar-striped bg-info"
+            role="progressbar"
+            style="width: {{percentrual_gastos_essenciais}}%"
+            aria-valuenow="50"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+        <br />
+        <p>Gastos não essenciais</p>
+        <div class="progress">
+          <div
+            class="progress-bar progress-bar-striped bg-info"
+            role="progressbar"
+            style="width: {{percentrual_gastos_nao_essenciais}}%"
+            aria-valuenow="50"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+
+        <hr class="hr-borda" />
+        <a href="{% url 'gerenciar' %}" class="botao-principal"
+          >Alterar categorias essenciais</a
+        >
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-md-4"></div>
+
+    <div class="col-md-8">
+      <div class="card">
+        <span class="fonte-destaque">Gerenciar contas</span>
+        <hr class="hr-borda" />
+
+        <span class="fonte-destaque">Próximas do vencimento</span>
+        <span class="fonte-light">3 contas próximas do vencimento</span>
+        <br />
+        <span class="fonte-destaque negativo">Vencidas</span>
+        <span class="fonte-light">0 contas vencidas</span>
+
+        <hr class="hr-borda" />
+
+        <a href="{% url 'ver_contas' %}" class="botao-principal">Ver mais</a>
+      </div>
+    </div>
+  </div>
+  <br />
+  <br />
+</div>
+<script>
+  async function fetchCotacoes() {
+    try {
+      let response = await fetch(
+        "https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL"
+      );
+      let data = await response.json();
+
+      let cotacao_dolar = parseFloat(data["USDBRL"]["bid"]);
+      let cotacao_euro = parseFloat(data["EURBRL"]["bid"]);
+      let cotacao_btc = parseFloat(data["BTCBRL"]["bid"]);
+
+      // Obtenha a data atual
+      var dataAtual = new Date();
+
+      // Opções para formatação apenas com o mês e o ano
+      var opcoes = { month: "long" };
+
+      // Formate a data para mostrar apenas o mês atual
+      var mesAtual = dataAtual.toLocaleString("pt-BR", opcoes);
+      var mesAtual1 = dataAtual.toLocaleString("pt-BR", opcoes);
+
+      // Exiba o mês atual no elemento com id 'mes_atual'
+      document.getElementById("mes_atual").innerText = mesAtual;
+      document.getElementById("mes_atual1").innerText = mesAtual1;
+
+      // Formate os valores monetários para o formato brasileiro
+      document.getElementById("cotacao_dolar").innerText =
+        cotacao_dolar.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+      document.getElementById("cotacao_euro").innerText =
+        cotacao_euro.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+      document.getElementById("cotacao_btc").innerText = (
+        cotacao_btc * 1000
+      ).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+      document.getElementById("ultima_atualizacao").innerText =
+        new Date().toLocaleString("pt-BR");
+    } catch (error) {
+      console.error("Erro ao buscar as cotações:", error);
+    }
+  }
+
+  fetchCotacoes();
+</script>
+
 {% endblock %}
-
