@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from perfil.models import Categoria
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -14,6 +14,7 @@ def update_valor_categoria(request, id):
     novo_valor = json.load(request)['novo_valor']
     categoria = Categoria.objects.get(id=id)
     categoria.valor_planejamento = novo_valor
+
     categoria.save()
     return JsonResponse({'status': 'Sucesso'})
 

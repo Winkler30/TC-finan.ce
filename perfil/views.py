@@ -86,10 +86,16 @@ def cadastrar_categoria(request):
 
 def update_categoria(request, id):
     categoria = Categoria.objects.get(id=id)
-
     categoria.essencial = not categoria.essencial
-
     categoria.save()
+
+    categoria_alterada_false = Categoria.objects.filter(id=id).filter(essencial=False)
+    categoria_alterada_true = Categoria.objects.filter(id=id).filter(essencial=True)
+
+    if categoria_alterada_false:
+        messages.add_message(request, constants.SUCCESS, f'Categoria {categoria.categoria} alterada para NÃO ESSENCIAL')
+    elif categoria_alterada_true:
+        messages.add_message(request, constants.SUCCESS, f'Categoria {categoria.categoria} alterada para ESSENCIAL')
 
     return redirect('/perfil/gerenciar/')
 
