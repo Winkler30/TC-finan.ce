@@ -58,13 +58,20 @@ def cadastrar_banco(request):
     messages.add_message(request, constants.SUCCESS, 'Conta cadastrada com sucesso')
     return redirect('/perfil/gerenciar/')
 
+from django.db import IntegrityError
+
 def deletar_banco(request, id):
-    apelido = Conta.objects.get(id=id).apelido
-    conta = Conta.objects.get(id=id)
-    conta.delete()
-    
-    messages.add_message(request, constants.SUCCESS, f'Conta: {apelido}, removida com sucesso')
+    try:
+        conta = Conta.objects.get(id=id)
+        apelido = conta.apelido
+        conta.delete()
+        messages.add_message(request, constants.SUCCESS, f'Conta: {apelido}, removida com sucesso')
+    except Conta.DoesNotExist:
+        messages.add_message(request, constants.ERROR, 'Conta não encontrada')
+    except IntegrityError as e:
+        messages.add_message(request, constants.ERROR, f'Erro ao deletar a conta: {str(e)}')
     return redirect('/perfil/gerenciar/')
+
 
 def cadastrar_categoria(request):
     nome = request.POST.get('categoria')
